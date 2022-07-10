@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by changming.xie on 2/23/17.
- */
+
 public final class FactoryBuilder {
 
 
@@ -43,7 +41,7 @@ public final class FactoryBuilder {
 
         private volatile T instance = null;
 
-        private String className;
+        private final String className;
 
         public SingeltonFactory(Class<T> clazz, T instance) {
             this.className = clazz.getName();
@@ -66,7 +64,7 @@ public final class FactoryBuilder {
 
                             instance = (T) clazz.getDeclaredConstructor().newInstance();
                         } catch (Exception e) {
-                            throw new RuntimeException("Failed to create an instance of " + className, e);
+                            throw new IllegalArgumentException("Failed to create an instance of " + className, e);
                         }
                     }
                 }
