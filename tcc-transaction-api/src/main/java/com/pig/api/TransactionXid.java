@@ -8,8 +8,7 @@ import java.util.UUID;
 
 public class TransactionXid implements Xid, Serializable {
     private static final long serialVersionUID = -6817267250789142043L;
-    private static byte[] CUSTOMIZED_TRANSACTION_ID = "UniqueIdentity".getBytes();
-    private int formatId = 1;
+    private static final byte[] CUSTOMIZED_TRANSACTION_ID = "UniqueIdentity".getBytes();
     private byte[] globalTransactionId;
     private byte[] branchQualifier;
 
@@ -54,6 +53,7 @@ public class TransactionXid implements Xid, Serializable {
 
     @Override
     public int getFormatId() {
+        int formatId = 1;
         return formatId;
     }
 
@@ -94,21 +94,18 @@ public class TransactionXid implements Xid, Serializable {
         return stringBuilder.toString();
     }
 
-    public TransactionXid clone(){
-        byte[] cloneGlobalTransactionId = null;
-        byte[] cloneBranchQualifier = null;
+    public TransactionXid(TransactionXid sourceXid){
 
-        if (globalTransactionId != null) {
-            cloneGlobalTransactionId = new byte[globalTransactionId.length];
-            System.arraycopy(globalTransactionId, 0, cloneGlobalTransactionId, 0, globalTransactionId.length);
+        if (sourceXid.globalTransactionId != null) {
+            this.globalTransactionId = new byte[sourceXid.globalTransactionId.length];
+            System.arraycopy(sourceXid.globalTransactionId, 0, this.globalTransactionId, 0, globalTransactionId.length);
         }
 
-        if (branchQualifier != null) {
-            cloneBranchQualifier = new byte[branchQualifier.length];
-            System.arraycopy(branchQualifier, 0, cloneBranchQualifier, 0, branchQualifier.length);
+        if (sourceXid.branchQualifier != null) {
+            this.branchQualifier = new byte[sourceXid.branchQualifier.length];
+            System.arraycopy(branchQualifier, 0, this.branchQualifier, 0, branchQualifier.length);
         }
 
-        return new TransactionXid(cloneGlobalTransactionId, cloneBranchQualifier);
     }
 
     public int hashCode() {
@@ -133,9 +130,6 @@ public class TransactionXid implements Xid, Serializable {
             return false;
         } else if (!Arrays.equals(branchQualifier, other.branchQualifier)) {
             return false;
-        } else if (!Arrays.equals(globalTransactionId, other.globalTransactionId)) {
-            return false;
-        }
-        return true;
+        } else return Arrays.equals(globalTransactionId, other.globalTransactionId);
     }
 }

@@ -9,7 +9,7 @@ public class NullableTransactionContextEditor implements TransactionContextEdito
     }
 
     @Override
-    public void set(TransactionContext transactionContext, Object target, Method method, Object[] args) {
-
+    public void set(TransactionContext transactionContext, Object target, Method method, Object[] args) throws UnsupportedOperationException{
+        // TODO document why this method is empty
     }
 }
