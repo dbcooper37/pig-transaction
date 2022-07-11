@@ -53,8 +53,7 @@ public class TransactionXid implements Xid, Serializable {
 
     @Override
     public int getFormatId() {
-        int formatId = 1;
-        return formatId;
+        return 1;
     }
 
     @Override

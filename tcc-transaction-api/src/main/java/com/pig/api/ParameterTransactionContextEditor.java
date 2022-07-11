@@ -7,7 +7,7 @@ public class ParameterTransactionContextEditor implements TransactionContextEdit
     public static int getTransactionContextParamPosition(Class<?>[] parameterTypes) {
         int position = -1;
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (parameterTypes[i].equals(com.pig.api.TransactionContext.class)) {
+            if (parameterTypes[i].equals(.api.TransactionContext.class)) {
                 position = i;
                 break;
             }
@@ -22,8 +22,8 @@ public class ParameterTransactionContextEditor implements TransactionContextEdit
     public static TransactionContext getTransactionContextFromArgs(Object[] args) {
         TransactionContext transactionContext = null;
         for (Object object : args) {
-            if (object != null && com.pig.api.TransactionContext.class.isAssignableFrom(object.getClass())) {
-                transactionContext = (com.pig.api.TransactionContext) object;
+            if (object != null && .api.TransactionContext.class.isAssignableFrom(object.getClass())) {
+                transactionContext = (.api.TransactionContext) object;
             }
         }
         return transactionContext;

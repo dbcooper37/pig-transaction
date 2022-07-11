@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>tcc-transaction</artifactId>
-        <groupId>com.pig</groupId>
+        <groupId></groupId>
         <version>{revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

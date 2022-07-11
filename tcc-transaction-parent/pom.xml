@@ -8,7 +8,7 @@
 
     <parent>
         <artifactId>tcc-transaction</artifactId>
-        <groupId>com.pig</groupId>
+        <groupId></groupId>
         <version>{revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -33,7 +33,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.pig</groupId>
+                <groupId></groupId>
                 <artifactId>tcc-transaction-dependencies</artifactId>
                 <version>{revision}</version>
                 <scope>import</scope>

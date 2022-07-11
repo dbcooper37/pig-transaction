@@ -9,7 +9,7 @@ public final class FactoryBuilder {
 
 
     private static final List<BeanFactory> beanFactories = new ArrayList<>();
-    private static ConcurrentHashMap<Class, SingeltonFactory> classFactoryMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Class<?>, SingeltonFactory<?>> classFactoryMap = new ConcurrentHashMap<>();
 
     private FactoryBuilder() {
 
@@ -21,16 +21,16 @@ public final class FactoryBuilder {
 
             for (BeanFactory beanFactory : beanFactories) {
                 if (beanFactory.isFactoryOf(clazz)) {
-                    classFactoryMap.putIfAbsent(clazz, new SingeltonFactory<T>(clazz, beanFactory.getBean(clazz)));
+                    classFactoryMap.putIfAbsent(clazz, new SingeltonFactory<>(clazz, beanFactory.getBean(clazz)));
                 }
             }
 
             if (!classFactoryMap.containsKey(clazz)) {
-                classFactoryMap.putIfAbsent(clazz, new SingeltonFactory<T>(clazz));
+                classFactoryMap.putIfAbsent(clazz, new SingeltonFactory<>(clazz));
             }
         }
 
-        return classFactoryMap.get(clazz);
+        return (SingeltonFactory<T>) classFactoryMap.get(clazz);
     }
 
     public static void registerBeanFactory(BeanFactory beanFactory) {
@@ -78,7 +78,7 @@ public final class FactoryBuilder {
             if (this == other) return true;
             if (other == null || getClass() != other.getClass()) return false;
 
-            SingeltonFactory that = (SingeltonFactory) other;
+            SingeltonFactory<?> that = (SingeltonFactory<?>) other;
 
             return className.equals(that.className);
         }

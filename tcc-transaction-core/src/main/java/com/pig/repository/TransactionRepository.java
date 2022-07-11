@@ -12,8 +12,9 @@ public interface TransactionRepository extends Closeable {
     int create(Transaction transaction);
     int update(Transaction transaction);
     int delete(Transaction transaction);
-    Transaction findById(Xid id);
-    Transaction findByRootId(Xid id);
+    Transaction findByXid(Xid xid);
+
+    Transaction findByRootXid(Xid xid);
     Page<Transaction> findAllUnmodifiedSince(Date date, String offset, int pageSize);
 
     @Override

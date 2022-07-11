@@ -16,7 +16,7 @@ public class Terminator {
         if(StringUtils.isNotEmpty(invocationContext.getMethodName())){
             try{
                 Object target = FactoryBuilder.factoryOf(invocationContext.getTargetClass()).getInstance();
-                Method method = null;
+                Method method;
                 method = target.getClass().getMethod(invocationContext.getMethodName(),invocationContext.getParameterType());
                 FactoryBuilder.factoryOf(transactionContextEditorClass).getInstance().set(transactionContext,target,method,invocationContext.getArgs());
                 return method.invoke(target,invocationContext.getArgs());
