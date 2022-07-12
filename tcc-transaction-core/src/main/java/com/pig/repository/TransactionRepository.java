@@ -7,7 +7,7 @@ import java.io.Closeable;
 import java.util.Date;
 
 public interface TransactionRepository extends Closeable {
-    String Domain();
+    String getDomain();
     String getRootDomain();
     int create(Transaction transaction);
     int update(Transaction transaction);

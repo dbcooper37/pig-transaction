@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>tcc-transaction-parent</artifactId>
-        <groupId></groupId>
-        <version>{revision}</version>
+        <groupId>com.pig</groupId>
+        <version>0.1</version>
         <relativePath>../tcc-transaction-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
