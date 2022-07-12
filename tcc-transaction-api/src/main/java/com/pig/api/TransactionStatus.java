@@ -30,6 +30,7 @@ public enum TransactionStatus {
         return id;
     }
 
+    @Override
     public String toString() {
         switch (id) {
             case 1:

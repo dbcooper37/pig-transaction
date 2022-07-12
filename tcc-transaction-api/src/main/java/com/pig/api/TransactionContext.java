@@ -29,7 +29,7 @@ public class TransactionContext implements Serializable {
     }
 
     public TransactionXid getXid() {
-        return xid.clone();
+        return new TransactionXid(xid);
     }
 
     public void setXid(TransactionXid xid) {
