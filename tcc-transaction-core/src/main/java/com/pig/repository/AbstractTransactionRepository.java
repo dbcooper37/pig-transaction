@@ -12,8 +12,7 @@ public abstract class AbstractTransactionRepository implements TransactionReposi
     @Override
     public int create(Transaction transaction){
         transaction.setVersion(1l);
-        int result = doCreate(transaction);
-        return result;
+        return doCreate(transaction);
     }
 
     @Override
@@ -33,20 +32,17 @@ public abstract class AbstractTransactionRepository implements TransactionReposi
 
     @Override
     public Transaction findByXid(Xid transactionXid){
-        Transaction transaction = doFindOne(transactionXid);
-        return transaction;
+        return doFindOne(transactionXid);
     }
 
     @Override
     public Transaction findByRootXid(Xid transactionXid){
-        Transaction transaction = doFindRootOne(transactionXid);
-        return transaction;
+        return doFindRootOne(transactionXid);
     }
 
     @Override
     public Page<Transaction> findAllUnmodifiedSince(Date date, String offset, int pageSize){
-        Page<Transaction> page = doFindAllUnmodifiedSince(date,offset,pageSize);
-        return page;
+        return doFindAllUnmodifiedSince(date,offset,pageSize);
     }
 
     protected abstract int doCreate(Transaction transaction);
