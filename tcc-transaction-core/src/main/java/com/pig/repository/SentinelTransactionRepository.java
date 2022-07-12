@@ -97,4 +97,24 @@ public class SentinelTransactionRepository extends AbstractTransactionRepository
             return degradedTransactionRepository.getRootDomain();
         }
     }
+
+    public SentinelController getSentinelController(){
+        return sentinelController;
+    }
+
+    public AbstractTransactionRepository getWorkTransactionRepository() {
+        return workTransactionRepository;
+    }
+
+    public void setWorkTransactionRepository(AbstractTransactionRepository workTransactionRepository) {
+        this.workTransactionRepository = workTransactionRepository;
+    }
+
+    public AbstractTransactionRepository getDegradedTransactionRepository() {
+        return degradedTransactionRepository;
+    }
+
+    public void setDegradedTransactionRepository(AbstractTransactionRepository degradedTransactionRepository) {
+        this.degradedTransactionRepository = degradedTransactionRepository;
+    }
 }
