@@ -1,15 +1,13 @@
 package com.pig.recovery;
 
 import com.alibaba.fastjson.JSON;
-import com.pig.Transaction;
-
-import com.pig.TransactionOptimisticLockException;
+import com.pig.transaction.Transaction;
+import com.pig.storage.TransactionOptimisticLockException;
 import com.pig.api.TransactionStatus;
 import com.pig.common.TransactionType;
-import com.pig.repository.LocalStoreable;
-import com.pig.repository.Page;
-import com.pig.repository.SentinelTransactionRepository;
-import com.pig.repository.TransactionRepository;
+import com.pig.storage.LocalStoreable;
+import com.pig.storage.Page;
+import com.pig.storage.SentinelTransactionStorage;
 import com.pig.support.TransactionConfigurator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -24,25 +22,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.pig.api.TransactionStatus.CANCELLING;
 import static com.pig.api.TransactionStatus.CONFIRMING;
+
 
 
 public class TransactionRecovery {
     public static final int CONCURRENT_RECOVERY_TIMEOUT = 60;
-    public static final int MAX_ERROR_COUNT_SHREDHOLD = 15;
+    public static final int MAX_ERROR_COUNT_THRESHOLD = 15;
 
     static final Logger logger = LoggerFactory.getLogger(TransactionRecovery.class.getSimpleName());
 
-    static volatile ExecutorService recoveryExecutorService = null;
+     private static volatile ExecutorService recoveryExecutorService = null;
 
     private TransactionConfigurator transactionConfigurator;
 
-    private AtomicInteger triggerMaxRetryPrintCount = new AtomicInteger();
+    private final AtomicInteger triggerMaxRetryPrintCount = new AtomicInteger();
 
-    private AtomicInteger recoveryFailedPrintCount = new AtomicInteger();
+    private final AtomicInteger recoveryFailedPrintCount = new AtomicInteger();
 
-    private volatile int logMaxPrintCount = MAX_ERROR_COUNT_SHREDHOLD;
+    private volatile int logMaxPrintCount = MAX_ERROR_COUNT_THRESHOLD;
 
     private Lock logSync = new ReentrantLock();
 
@@ -53,8 +51,8 @@ public class TransactionRecovery {
     public void startRecover() {
         ensureRecoveryInitialized();
         TransactionRepository transactionRepository = transactionConfigurator.getTransactionRepository();
-        if (transactionRepository instanceof SentinelTransactionRepository) {
-            SentinelTransactionRepository sentinelTransactionRepository = (SentinelTransactionRepository) transactionRepository;
+        if (transactionRepository instanceof SentinelTransactionStorage) {
+            SentinelTransactionStorage sentinelTransactionRepository = (SentinelTransactionStorage) transactionRepository;
             if (!sentinelTransactionRepository.getSentinelController().degrade()) {
                 startRecover(sentinelTransactionRepository.getWorkTransactionRepository());
             } else {
@@ -86,6 +84,7 @@ public class TransactionRecovery {
                 ));
             } catch (Throwable e) {
                 logger.error(String.format("recovery failed from repository: %s", transactionRepository.getClass().getName()), e);
+                Thread.currentThread().interrupt();
             } finally {
                 recoveryLock.unlock();
             }
@@ -223,11 +222,12 @@ public class TransactionRecovery {
     }
 
     private void ensureRecoveryInitialized() {
+
         if (recoveryExecutorService == null) {
             synchronized (TransactionRecovery.class) {
                 if (recoveryExecutorService == null) {
                     recoveryExecutorService = Executors.newFixedThreadPool(transactionConfigurator.getRecoverFrequency().getConcurrentRecoveryThreadCount());
-                    logMaxPrintCount = Math.min(transactionConfigurator.getRecoverFrequency().getFetchPageSize() / 2, MAX_ERROR_COUNT_SHREDHOLD);
+                    logMaxPrintCount = Math.min(transactionConfigurator.getRecoverFrequency().getFetchPageSize() / 2, MAX_ERROR_COUNT_THRESHOLD);
                 }
             }
         }

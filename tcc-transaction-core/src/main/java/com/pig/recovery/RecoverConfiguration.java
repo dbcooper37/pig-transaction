@@ -1,7 +1,6 @@
 package com.pig.recovery;
 
-import com.pig.TransactionManager;
-import com.pig.repository.TransactionRepository;
+import com.pig.transaction.TransactionManager;
 import com.pig.support.TransactionConfigurator;
 
 import java.util.concurrent.locks.Lock;
